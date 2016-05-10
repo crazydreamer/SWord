@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Login{% endblock %}
+
+{% block library %}
+<link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="ui middle aligned center aligned grid">
+  <div class="column">
+    <h2 class="ui teal image header">
+      {# <img src="assets/images/logo.png" class="image"> #}
+      <div class="content">
+        Log-in to your account
+      </div>
+    </h2>
+    <form class="ui large form {% if error %}error{% endif %}" method="post">
+      {% csrf_token %}
+      {% if error %}
+        <div class="ui error message">
+          {{ error }}
+        </div>
+      {% endif %}
+      <div class="ui stacked segment">
+        
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" name="username" placeholder="Username">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" name="password" placeholder="Password">
+          </div>
+        </div>
+        <input type="submit" class="ui fluid large teal submit button" value="Login"></input>
+      </div>
+
+      <div class="ui error message"></div>
+
+    </form>
+
+    <div class="ui message">
+      New to us? <a href="#">Sign Up</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

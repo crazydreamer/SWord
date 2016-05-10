@@ -1,0 +1,33 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}SWord{% endblock %}</title>
+	<link rel="stylesheet" href="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.css">
+	<link rel="stylesheet" href="{% static 'memo/css/style.css' %}">
+	<script src="//cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script>
+	<script src="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.js"></script>
+	{% block library %}{% endblock %}
+</head>
+<body>
+	<div class="ui inverted menu">
+		<div class="ui container">
+			<a href="{% url 'memo:index' %}" class="header item">
+				花甲单词
+			</a>
+			<div class="right menu">
+			{% if request.user.is_active %}
+				<div class="item">{{ request.user.username }}</div>
+				<a href="{% url 'accounts:logout' %}" class="item">Log out</a>
+			{% else %}
+				<a href="{% url 'accounts:login' %}" class="item">Log in</a>
+				<a class="item">Sign up</a>
+			{% endif %}
+			</div>
+		</div>
+	</div>
+	{% block content %}
+	{% endblock %}
+</body>
+</html>
