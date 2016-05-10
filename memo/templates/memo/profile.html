@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="ui main container items centered grid">
+  <div class="row">
+    <div class="ten wide column">
+      <h1>User Profile</h1>
+      <div class="ui vertical segment">
+        <div class="row">
+          <div class="column">
+            <h2>The word you have mastered: {{ total_words }}</h2>
+          </div>
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          <div class="ui form">
+            <div class="field">
+              <label>Select your vocabulary book</label>
+              <select name="vocabulary" class="ui fluid dropdown">
+                {% for v in vocs %}
+                  <option value="{{ v }}">{{ v }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field">
+              <input class="ui blue button" type="submit" value="apply">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+<script type="text/javascript">
+$(document).ready(function () {
+  $('select.dropdown').dropdown();
+});
+</script>
+{% endblock %}

@@ -4,4 +4,5 @@ import views, auth
 app_name = 'memo'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^home/?$', views.profile, name='profile'),
 ]

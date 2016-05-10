@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from __future__ import unicode_literals
 
 from django.db import models
@@ -5,16 +7,20 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Word(models.Model):
-    content = models.CharField("Content", max_length=100)
-    description = models.TextField("Description")
+    """单词"""
+
+    content = models.CharField("Content", max_length=100, unique=True)
+    description = models.TextField("Description", )
     example = models.TextField("Example Sentence", default="")
-    vocabulary = models.ManyToManyField("Vocabulary", default="")
+    vocabulary = models.ManyToManyField("Vocabulary")
 
     def __str__(self):
         return self.content
 
 
 class Vocabulary(models.Model):
+    """词库"""
+
     name = models.CharField("Name", max_length=100)
     description = models.TextField("Description", default="")
 
@@ -23,21 +29,31 @@ class Vocabulary(models.Model):
 
 
 class Memo(models.Model):
+    """笔记"""
+
     word = models.ForeignKey("Word", on_delete=models.CASCADE)
     content = models.TextField("Content", default="")
     user = models.ForeignKey(User)
 
     def __str__(self):
-        return self.word
+        return " " .join([self.word.content, self.content])
 
 
 class UserProfile(models.Model):
+    """用户信息"""
+
     user = models.OneToOneField(User)
     memorized_words = models.ManyToManyField("Word", blank=True)
     current_vocabulary = models.ForeignKey("Vocabulary", 
                     on_delete=models.SET_NULL, null=True)
-    daily_words_amount = models.SmallIntegerField("Daily Words Amount", default=100)
+    daily_words_amount = models.SmallIntegerField("Daily Words Amount", default=20)
 
     def __str__(self):
         return self.user.username
 
+
+class LearningWord(models.Model):
+    """本日正在学习的单词"""
+
+    word = models.ForeignKey("Word")
+    user = models.ForeignKey(User)
