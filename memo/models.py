@@ -43,7 +43,10 @@ class UserProfile(models.Model):
     """用户信息"""
 
     user = models.OneToOneField(User)
-    memorized_words = models.ManyToManyField("Word", blank=True)
+    memorized_words = models.ManyToManyField("Word", blank=True, 
+                            related_name="memorized_words")
+    learning_words = models.ManyToManyField("Word", blank=True, 
+                            related_name="learning")
     current_vocabulary = models.ForeignKey("Vocabulary", 
                     on_delete=models.SET_NULL, null=True)
     daily_words_amount = models.SmallIntegerField("Daily Words Amount", default=20)
@@ -51,9 +54,3 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-
-class LearningWord(models.Model):
-    """本日正在学习的单词"""
-
-    word = models.ForeignKey("Word")
-    user = models.ForeignKey(User)
