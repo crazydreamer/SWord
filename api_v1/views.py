@@ -1,5 +1,4 @@
 from django.http import JsonResponse
-from django.shortcuts import render
 from memo.models import Word, Note
 
 

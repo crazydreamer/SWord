@@ -18,7 +18,7 @@
 			</a>
 			<div class="right menu">
 			{% if request.user.is_active %}
-				<div class="item">{{ request.user.username }}</div>
+				<a href="{% url 'memo:profile' %}" class="item">{{ request.user.username }}</a>
 				<a href="{% url 'accounts:logout' %}" class="item">Log out</a>
 			{% else %}
 				<a href="{% url 'accounts:login' %}" class="item">Log in</a>

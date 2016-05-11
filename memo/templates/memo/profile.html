@@ -6,28 +6,34 @@
   <div class="row">
     <div class="ten wide column">
       <h1>User Profile</h1>
-      <div class="ui vertical segment">
+      <div class="ui grid">
         <div class="row">
           <div class="column">
-            <h2>The word you have mastered: {{ total_words }}</h2>
+            <h2>你已掌握 {{ total_words }} 个单词</h2>
           </div>
         </div>
-        <form method="post">
-          {% csrf_token %}
-          <div class="ui form">
-            <div class="field">
-              <label>Select your vocabulary book</label>
-              <select name="vocabulary" class="ui fluid dropdown">
-                {% for v in vocs %}
-                  <option value="{{ v }}">{{ v }}</option>
-                {% endfor %}
-              </select>
+        <div class="row">
+          <form method="post">
+            {% csrf_token %}
+            <div class="ui form">
+              <div class="inline field">
+                <label>选择词书</label>
+                <select name="vocabulary" class="ui fluid dropdown">
+                  {% for v in vocs %}
+                    <option value="{{ v }}">{{ v }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="inline field">
+                <label>每日单词数</label>
+                <input type="text" name="daily_words" value="{{ daily_words }}">
+              </div>
+              <div class="field">
+                <input class="ui blue button" type="submit" value="确认">
+              </div>
             </div>
-            <div class="field">
-              <input class="ui blue button" type="submit" value="apply">
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>

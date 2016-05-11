@@ -72,4 +72,5 @@ class LearningWord(models.Model):
 
     word = models.ForeignKey("Word")
     user = models.ForeignKey(User)
+    status = models.SmallIntegerField("Word Status", default=3)                 # 0, 1, 2, 3 分别代表背过，对一次，不对，未背
     # 可以在此添加学习次数等
