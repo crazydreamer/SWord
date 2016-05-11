@@ -59,11 +59,18 @@ def status(request):
 
 
 def word_status(request, word_id):
-    """更新用户单词状态，只允许 POST"""
+    """更新用户单词状态，只允许 POST"""                                         # TODO: 改成PUT，可能要改 URL
     if request.user.is_authenticated():                                         # 考虑加一个装饰器
         if request.method == "POST":
             status = int(request.POST["status"])
             learning = LearningWord.objects.get(pk=int(word_id))                # TODO: 数据合法性判断！
+            if learning.user != request.user:
+                return JsonResponse({
+                        "success": False,
+                        "reason": "Unauthorized"
+                    }, status=401)
+                pass
+
             learning.status = status
             learning.save()
 
@@ -85,5 +92,25 @@ def word_status(request, word_id):
 
 
 def finish(request):
-    """用户已完成"""
-    pass
+    """用户已完成，将用户所有正在学习的单词转移至已掌握，只接受POST"""
+    if request.user.is_authenticated():                                         # 考虑加一个装饰器
+        if request.method == "POST":
+            user = request.user
+            profile = UserProfile.objects.get(user=user)
+            learning_words = LearningWord.objects.filter(user=user)
+            for lw in learning_words:
+                word = lw.word
+                profile.memorized_words.add(word)
+            learning_words.delete()
+            return JsonResponse({ "success": True })
+        else:
+            return JsonResponse({
+            "success": False,
+            "reason": "Method not allowed"
+        }, status=405)
+
+    else:
+        return JsonResponse({
+            "success": False,
+            "reason": "Login required"
+        }, status=401)

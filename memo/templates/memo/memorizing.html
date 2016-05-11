@@ -10,30 +10,32 @@
 {% block content %}
 {% verbatim %}
 <div id="app" class="ui center aligned grid">
-	<div class="row">
-		<div class="ui container" v-if="start">
-			<div class="ui grid" v-if="status>0">
-				<div class="row">
-					Your Statistic: {{ word_stat.progress }}
+	<div class="eight wide column">
+		<div v-if="start">
+			<div class="ui segments" v-if="status>0">
+				<div class="ui segment">
+					<p>Your Statistic: {{ word_stat.progress }}</p>
 				</div>
-				<div class="row">
-					{{ current_word.content }}
+				<div class="ui segment">
+					<p>{{ current_word.content }}</p>
 				</div>
-				<div class="row" v-show="status<=2">
-					{{ current_word.example }}
+				<div class="ui segment" v-show="status<=2">
+					<p>{{ current_word.example }}</p>
 				</div>
-				<div class="row" v-show="status<=1">
-					{{ current_word.description }}
+				<div class="ui segment" v-show="status<=1">
+					<p>{{ current_word.description }}</p>
 				</div>
-				<div class="two column row" v-show="status>=2">
-					<div class="column">
-						<button class="ui green button" @click="choose(true)">识得</button>
+				<div class="ui segment" v-show="status>=2">
+					<div class="ui centered two column grid">
+						<div class="right aligned four wide column">
+							<button class="ui green button" @click="choose(true)">识得</button>
+						</div>
+						<div class="four wide column">
+							<button class="ui orange button" @click="choose(false)">唔识得</button>
+						</div>
 					</div>
-					<div class="column">
-						<button class="ui orange button" @click="choose(false)">唔识得</button>
-					</div>
 				</div>
-				<div class="row" v-show="status==1" @click="choose(false)">
+				<div class="ui segment" v-show="status==1" @click="choose(false)">
 					<div class="ui teal button">查看</div>
 				</div>
 			</div>
@@ -50,23 +52,29 @@
 				<div class="row" v-for="note in current_word.notes">
 					{{ note.content }} - {{ note.user }}
 				</div>
+				<div class="row">
+					<a href="/word/{{ current_word.content }}" target="_blank">进入笔记页</a>
+				</div>
 				<!-- 评论页面 -->
 				<div class="row" @click="next">
 					<div class="ui teal button">下一个</div>
 				</div>
 			</div>
 		</div>
-		<div class="ui grid" v-else>
+		<div class="ui two column grid" v-else>
 			<div class="eight wide column">
-				<div class="row">
+				<!-- <div class="row"> -->
 					<p>今天要背的单词：{{ word_stat.total }}</p>
 					<p>已完成：{{ word_stat.progress[0] }}</p>
-				</div>
+				<!-- </div> -->
 			</div>
 			<div class="four wide column">
-				<div class="row">
-					<button class="ui button" @click="begin">开始</button>
-				</div>
+				<!-- <div class="row"> -->
+					<!-- <div class="ui container"> -->
+						<button class="ui button" @click="begin" v-if="!finish">开始</button>
+						<button class="ui big green circular button" @click="do_finish" v-else>再来一组</button>
+					<!-- </div> -->
+				<!-- </div> -->
 			</div>
 		</div>
 	</div>
