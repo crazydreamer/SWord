@@ -16,6 +16,9 @@
 			<a href="{% url 'memo:index' %}" class="header item">
 				花甲单词
 			</a>
+			{% if request.user.is_active %}
+			<a href="{% url 'memo:memorizing' %}" class="item">背单词！</a>
+			{% endif %}
 			<div class="right menu">
 			{% if request.user.is_active %}
 				<a href="{% url 'memo:profile' %}" class="item">{{ request.user.username }}</a>

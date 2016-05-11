@@ -51,3 +51,7 @@ def find_word(request, word):
     context["notes"] = notes
     return render(request, "memo/word.html", context)
 
+
+@login_required
+def memorizing(request):
+    return render(request, "memo/memorizing.html")

@@ -15,12 +15,10 @@ class Word(models.Model):
     vocabulary = models.ManyToManyField("Vocabulary")
 
     def information(self):
-        vocs = [v.id for v in self.vocabulary.all()]
         return {
             "content": self.content,
             "description": self.description,
             "example": self.example,
-            "vocabulary": vocs
         }
 
     def __str__(self):
@@ -74,3 +72,6 @@ class LearningWord(models.Model):
     user = models.ForeignKey(User)
     status = models.SmallIntegerField("Word Status", default=3)                 # 0, 1, 2, 3 分别代表背过，对一次，不对，未背
     # 可以在此添加学习次数等
+
+    def __str__(self):
+        return self.user.username+" - "+self.word.content
