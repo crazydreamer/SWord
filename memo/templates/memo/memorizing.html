@@ -4,6 +4,8 @@
 {% block library %}
 <!-- <script src="//cdn.bootcss.com/vue/1.0.22/vue.min.js"></script> -->
 <script src="{% static 'generic/lib/vue.js' %}"></script>
+<link rel="stylesheet" href="{% static 'memo/css/memorizing.css' %}"></link>
+<link rel="stylesheet" href="{% static 'memo/css/progress.css' %}"></link>
 {% endblock %}
 
 
@@ -12,9 +14,23 @@
 <div id="app" class="ui center aligned grid">
 	<div class="eight wide column">
 		<div v-if="start">
-			<div class="ui segments" v-if="status>0">
+			<div class="ui piled segments" v-if="status>0">
 				<div class="ui segment">
-					<p>Your Statistic: {{ word_stat.progress }}</p>
+					<div class="progress">
+						<div class="progress-bar progress-bar-success" v-bind:style="{ width:  word_stat.percent[0] }">
+							<span class="sr-only">{{ word_stat.progress[0] }}</span>
+						</div>
+						<div class="progress-bar progress-bar-warning" v-bind:style="{ width:  word_stat.percent[1] }">
+							<span class="sr-only">{{ word_stat.progress[1] }}</span>
+						</div>
+						<div class="progress-bar progress-bar-gray" v-bind:style="{ width:  word_stat.percent[3] }">
+							<span class="sr-only">{{ word_stat.progress[3] }}</span>
+						</div>
+						<div class="progress-bar progress-bar-danger" v-bind:style="{ width:  word_stat.percent[2] }">
+							<span class="sr-only">{{ word_stat.progress[2] }}</span>
+						</div>
+					</div>
+					<!-- <p>Your Statistic: {{ word_stat.progress }}</p> -->
 				</div>
 				<div class="ui segment">
 					<p>{{ current_word.content }}</p>
@@ -71,8 +87,8 @@
 			<div class="four wide column">
 				<!-- <div class="row"> -->
 					<!-- <div class="ui container"> -->
-						<button class="ui button" @click="begin" v-if="!finish">开始</button>
-						<button class="ui big green circular button" @click="do_finish" v-else>再来一组</button>
+						<button class="ui big green circular button" @click="do_finish" v-if="finish">再来一组</button>
+						<button class="ui button" @click="begin" v-else>开始</button>
 					<!-- </div> -->
 				<!-- </div> -->
 			</div>
