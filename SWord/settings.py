@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'memo',
     'accounts',
+    'api_v1',
 ]
 
 MIDDLEWARE_CLASSES = [

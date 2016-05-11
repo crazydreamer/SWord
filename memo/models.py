@@ -14,6 +14,15 @@ class Word(models.Model):
     example = models.TextField("Example Sentence", default="")
     vocabulary = models.ManyToManyField("Vocabulary")
 
+    def information(self):
+        vocs = [v.id for v in self.vocabulary.all()]
+        return {
+            "content": self.content,
+            "description": self.description,
+            "example": self.example,
+            "vocabulary": vocs
+        }
+
     def __str__(self):
         return self.content
 
@@ -28,12 +37,18 @@ class Vocabulary(models.Model):
         return self.name
 
 
-class Memo(models.Model):
+class Note(models.Model):
     """笔记"""
 
-    word = models.ForeignKey("Word", on_delete=models.CASCADE)
+    word = models.ForeignKey("Word", on_delete=models.CASCADE, null=False)
     content = models.TextField("Content", default="")
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, null=False)
+
+    def information(self):
+        return {
+            "content": self.content,
+            "user": self.user.username
+        }
 
     def __str__(self):
         return " " .join([self.word.content, self.content])
