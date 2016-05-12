@@ -2,10 +2,28 @@
 {% load staticfiles %}
 
 {% block content %}
-<p>Word: {{ word }}</p>
-<p>Description: {{ description }}</p>
-<p>Sentence: {{ example }}</p>
-{% for note in notes %}
-<p>{{ note.content }} by {{ note.user }}</p>
-{% endfor %}
+<div class="ui centered grid">
+	<div class="eight wide column">
+		<div class="ui piled segments" word-id="{{ id }}">
+			<div class="ui segment">{{ content }}</div>
+			<div class="ui segment">Description: {{ description }}</div>
+			<div class="ui segment">Sentence: {{ example }}</div>
+			<div class="ui segment">
+				<div action="post" class="ui form">
+					<div class="field">
+						<label>笔记</label>
+						<textarea rows="3" name="content"></textarea>
+					</div>
+					<button class="ui button" id="submit">提交</button>
+				</div>
+			</div>
+			<div class="ui segment" id="notes">
+			{% for note in notes %}
+				<p>{{ note.content }} by {{ note.user }}</p>
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+<script src="{% static 'memo/js/word.js' %}"></script>
 {% endblock %}

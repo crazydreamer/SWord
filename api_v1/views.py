@@ -20,7 +20,7 @@ def note(request, word_id):
                         "reason": "start or end parameter error"
                     }, status=400)
             else:
-                notes = word.note_set.all()[start:end]
+                notes = word.note_set.order_by("-time")[start:end]
                 note_data = [note.information() for note in notes]
                 
                 return JsonResponse({ "success": True, "notes": note_data })
@@ -35,7 +35,10 @@ def note(request, word_id):
                     }, status=400)
             note = Note(word=word, content=content, user=request.user)
             note.save()
-            return JsonResponse({ "success": True })
+            return JsonResponse({
+                    "success": True,
+                    "note": note.information()
+                }, status=201)
 
     else:
         return JsonResponse({

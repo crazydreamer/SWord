@@ -2,8 +2,10 @@
 
 from __future__ import unicode_literals
 
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
+
 
 # Create your models here.
 class Word(models.Model):
@@ -16,6 +18,7 @@ class Word(models.Model):
 
     def information(self):
         return {
+            "id": self.id,
             "content": self.content,
             "description": self.description,
             "example": self.example,
@@ -40,6 +43,7 @@ class Note(models.Model):
 
     word = models.ForeignKey("Word", on_delete=models.CASCADE, null=False)
     content = models.TextField("Content", default="")
+    time = models.DateTimeField("Publish time", default=datetime.now())
     user = models.ForeignKey(User, null=False)
 
     def information(self):
