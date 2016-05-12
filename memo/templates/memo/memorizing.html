@@ -3,6 +3,7 @@
 
 {% block library %}
 <!-- <script src="//cdn.bootcss.com/vue/1.0.22/vue.min.js"></script> -->
+<script src="//cdn.bootcss.com/jquery.rest/1.0.2/jquery.rest.min.js"></script>
 <script src="{% static 'generic/lib/vue.js' %}"></script>
 <link rel="stylesheet" href="{% static 'memo/css/memorizing.css' %}"></link>
 <link rel="stylesheet" href="{% static 'memo/css/progress.css' %}"></link>
@@ -69,7 +70,7 @@
 					{{ note.content }} - {{ note.user }}
 				</div>
 				<div class="row">
-					<a href="/word/{{ current_word.content }}" target="_blank">进入笔记页</a>
+					<a href="/word/{{ current_word.word_id }}" target="_blank">进入笔记页</a>
 				</div>
 				<!-- 评论页面 -->
 				<div class="row" @click="next">
@@ -79,18 +80,12 @@
 		</div>
 		<div class="ui two column grid" v-else>
 			<div class="eight wide column">
-				<!-- <div class="row"> -->
-					<p>今天要背的单词：{{ word_stat.total }}</p>
-					<p>已完成：{{ word_stat.progress[0] }}</p>
-				<!-- </div> -->
+				<p>今天要背的单词：{{ word_stat.total }}</p>
+				<p>已完成：{{ word_stat.progress[0] }}</p>
 			</div>
 			<div class="four wide column">
-				<!-- <div class="row"> -->
-					<!-- <div class="ui container"> -->
-						<button class="ui big green circular button" @click="do_finish" v-if="finish">再来一组</button>
-						<button class="ui button" @click="begin" v-else>开始</button>
-					<!-- </div> -->
-				<!-- </div> -->
+				<button class="ui big green circular button" @click="do_finish" v-if="finish">再来一组</button>
+				<button class="ui button" @click="begin" v-else>开始</button>
 			</div>
 		</div>
 	</div>

@@ -38,11 +38,15 @@ def profile(request):
 
 
 def find_word(request, word):
-    word = get_object_or_404(Word, content=word)
+    try:
+        word_id = int(word)
+        word = get_object_or_404(Word, pk=word_id)
+    except ValueError:
+        word = get_object_or_404(Word, content=word)
 
     context = word.information()
     notes = []
-    for note in word.note_set.all():
+    for note in word.note_set.order_by("-time")[:5]:
         notes.append({
                 "content": note.content,
                 "user": note.user.username

@@ -1,16 +1,35 @@
 'use strict'
 
-function get_cookie(key) {
-  var cs = document.cookie;
-  var cookies = cs.split(";");
-  for (var cookie of cookies) {
-    var cl = cookie.split("=");
-    if (key.trim() == cl[0].trim()) {
-      return cl[1]
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie != '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = jQuery.trim(cookies[i]);
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
     }
   }
-  return ""
+  return cookieValue;
 }
+
+function csrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+  beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+      xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+    }
+  }
+});
+var client = new $.RestClient("/api/v1/");
+client.add("memo_status");
+client.add("memo_finish");
 
 var app = new Vue({
   el: "#app",
@@ -76,10 +95,10 @@ var app = new Vue({
       else {
         word.status = 0;
       }
-      $.post("/api/v1/memo/word/"+word.learning_id, {
-          status: word.status,
-          csrfmiddlewaretoken: get_cookie("csrftoken")
-        });
+
+      client.memo_status.update(word.learning_id, {
+        status: word.status
+      });
 
       this.status = 3;
 
@@ -100,12 +119,11 @@ var app = new Vue({
     },
     do_finish: function () {
       var app = this;
-      $.post("/api/v1/memo/finish", {
-        csrfmiddlewaretoken: get_cookie("csrftoken")
-      }, function (data, status) {
+
+      $.post("/api/v1/memo_finish", {}, function (data, status) {
         if (status == "success") {
           app.finish = false;
-          $.getJSON("/api/v1/memo/status", function(data, status) {
+          $.getJSON("/api/v1/memo_status", function(data, status) {
             app.words = data.words;
           })
         }
@@ -114,7 +132,7 @@ var app = new Vue({
   },
   compiled: function () {
     var app = this;
-    $.getJSON("/api/v1/memo/status", function(data, status) {
+    client.memo_status.read().done(function (data) {
       app.words = data.words;
     });
   }
