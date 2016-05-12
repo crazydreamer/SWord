@@ -35,7 +35,7 @@ $("#submit").click(function () {
   }, function (data, status) {
       if (data.success) {
         var note = data.note;
-        $("#notes").prepend("<p>"+note.content+" by "+note.user+"</p>");
+        $("#notes").prepend('<div class="ui segment">'+note.content+" by "+note.user+"</div>");
       }
   });
 });

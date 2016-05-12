@@ -5,17 +5,27 @@
 <div class="ui main container items centered grid">
   <div class="row">
     <div class="ten wide column">
-      <h1>User Profile</h1>
-      <div class="ui grid">
-        <div class="row">
-          <div class="column">
-            <h2>你已掌握 {{ total_words }} 个单词</h2>
-          </div>
+      <div class="ui segments">
+        <div class="ui basic segment">
+          <h1>User Profile</h1>
         </div>
-        <div class="row">
-          <form method="post">
+        {% if messages %}
+          <div class="ui basic segment">
+              {% for message in messages %}
+                <div class="ui {{ message.tags }} message">
+                    <i class="close icon"></i>
+                    <p>{{ message }}</p>
+                </div>
+              {% endfor %}
+          </div>
+        {% endif %}
+        <div class="ui basic segment">
+          <h2>你已掌握 {{ total_words }} 个单词</h2>
+        </div>
+        <div class="ui basic segment">
+          <div class="row">
+            <form method="post" class="ui form">
             {% csrf_token %}
-            <div class="ui form">
               <div class="inline field">
                 <label>选择词书</label>
                 <select name="vocabulary" class="ui fluid dropdown">
@@ -31,8 +41,9 @@
               <div class="field">
                 <input class="ui blue button" type="submit" value="确认">
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
+          </div>
         </div>
       </div>
     </div>
@@ -41,6 +52,9 @@
 <script type="text/javascript">
 $(document).ready(function () {
   $('select.dropdown').dropdown();
+  $('.message .close').on('click', function() {
+    $(this).closest('.message').transition('fade');
+  });
 });
 </script>
 {% endblock %}

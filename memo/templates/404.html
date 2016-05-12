@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>404 - SWord</title>
+	<style>
+	.container {
+		margin: 0;
+		padding-top: 6%;
+		text-align: center;
+	}
+	.container img {
+		width: 30%;
+		margin: 0 auto;
+	}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<img src="/static/404.jpg" alt="">
+		<p>5 秒后自动跳转首页</p>
+	</div>
+	<script>
+		setTimeout(function () {
+			location.href = "/";
+		}, 5000);
+	</script>
+</body>
+</html>

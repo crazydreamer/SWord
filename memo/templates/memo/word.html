@@ -17,9 +17,11 @@
 					<button class="ui button" id="submit">提交</button>
 				</div>
 			</div>
-			<div class="ui segment" id="notes">
+			<div class="ui segments" id="notes">
 			{% for note in notes %}
-				<p>{{ note.content }} by {{ note.user }}</p>
+				<div class="ui segment">
+					{{ note.content }} by {{ note.user }}
+				</div>
 			{% endfor %}
 			</div>
 		</div>

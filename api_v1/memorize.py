@@ -24,7 +24,7 @@ def __select_word(user):
                 AND AU.id = {id_});""".format(id_=user.id))
 
 
-def status(request, word_id=None):
+def status(request, learning_id=None):
     """返回或更新用户当前的背单词情况以及单词信息"""
     if request.user.is_authenticated():
         if request.method == "GET":
@@ -56,46 +56,12 @@ def status(request, word_id=None):
             put = QueryDict(request.body)                                       # 手动获取 PUT 信息
             status = int(put.get('status'))
 
-            learning = LearningWord.objects.get(pk=int(word_id))                # TODO: 数据合法性判断！
+            learning = LearningWord.objects.get(pk=int(learning_id))            # TODO: 数据合法性判断！
             if learning.user != request.user:
                 return JsonResponse({
                         "success": False,
                         "reason": "Unauthorized"
                     }, status=401)
-                pass
-
-            learning.status = status
-            learning.save()
-
-            return JsonResponse({
-                    "success": True
-                })
-
-        else:
-            return JsonResponse({
-            "success": False,
-            "reason": "Method not allowed"
-        }, status=405)
-
-    else:
-        return JsonResponse({
-            "success": False,
-            "reason": "Login required"
-        }, status=401)
-
-
-def word_status(request, word_id=None):
-    """更新用户单词状态，只允许 PUT"""                                          # TODO: 改成PUT，可能要改 URL
-    if request.user.is_authenticated():                                         # 考虑加一个装饰器
-        if request.method == "PUT":
-            status = int(request.POST["status"])
-            learning = LearningWord.objects.get(pk=int(word_id))                # TODO: 数据合法性判断！
-            if learning.user != request.user:
-                return JsonResponse({
-                        "success": False,
-                        "reason": "Unauthorized"
-                    }, status=401)
-                pass
 
             learning.status = status
             learning.save()

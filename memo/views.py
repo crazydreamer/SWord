@@ -1,5 +1,10 @@
+# coding: utf-8
+
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.contrib import messages
 from .models import Vocabulary, UserProfile, Word
 
 def index(request):
@@ -58,4 +63,8 @@ def find_word(request, word):
 
 @login_required
 def memorizing(request):
+    voc = UserProfile.objects.get(user=request.user).current_vocabulary
+    if voc is None:
+        messages.add_message(request, messages.INFO, '请选择词书~')
+        return HttpResponseRedirect(reverse("memo:profile"))
     return render(request, "memo/memorizing.html")

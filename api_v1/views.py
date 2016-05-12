@@ -23,7 +23,7 @@ def note(request, word_id):
                 notes = word.note_set.order_by("-time")[start:end]
                 note_data = [note.information() for note in notes]
                 
-                return JsonResponse({ "success": True, "notes": note_data })
+                return JsonResponse({ "success": True, "note": note_data })
 
         elif request.method == "POST":
             content = request.POST.get("content", None)

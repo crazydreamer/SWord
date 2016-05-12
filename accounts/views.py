@@ -56,7 +56,7 @@ def user_register(request):
             elif len(password1) < 6:
                 error_message = "Password must be as least 6 characters!"
 
-            elif re.match(r"^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$", email):
+            elif not re.match(r"^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$", email):
                 error_message = "Email is not valid!"
 
             else:
