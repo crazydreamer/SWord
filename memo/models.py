@@ -53,7 +53,7 @@ class Note(models.Model):
         }
 
     def __str__(self):
-        return " " .join([self.word.content, self.content])
+        return " " .join([self.word.content.encode("utf-8"), self.content.encode("utf-8")])
 
 
 class UserProfile(models.Model):

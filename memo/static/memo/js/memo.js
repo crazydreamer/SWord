@@ -121,7 +121,7 @@ var app = new Vue({
       var app = this;
 
       $.post("/api/v1/memo_finish", {}, function (data, status) {
-        if (status == "success") {
+        if (data.success) {
           app.finish = false;
           $.getJSON("/api/v1/memo_status", function(data, status) {
             app.words = data.words;

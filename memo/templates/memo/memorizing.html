@@ -18,7 +18,7 @@
 			<div class="ui piled segments" v-if="status>0">
 				<div class="ui segment">
 					<div class="progress">
-						<div class="progress-bar progress-bar-success" v-bind:style="{ width:  word_stat.percent[0] }">
+						<div class="progress-bar progress-bar-finished" v-bind:style="{ width:  word_stat.percent[0] }">
 							<span class="sr-only">{{ word_stat.progress[0] }}</span>
 						</div>
 						<div class="progress-bar progress-bar-reviewed" v-bind:style="{ width:  word_stat.percent[1] }">
@@ -27,7 +27,7 @@
 						<div class="progress-bar progress-bar-unreviewed" v-bind:style="{ width:  word_stat.percent[3] }">
 							<span class="sr-only">{{ word_stat.progress[3] }}</span>
 						</div>
-						<div class="progress-bar progress-bar-danger" v-bind:style="{ width:  word_stat.percent[2] }">
+						<div class="progress-bar progress-bar-forgot" v-bind:style="{ width:  word_stat.percent[2] }">
 							<span class="sr-only">{{ word_stat.progress[2] }}</span>
 						</div>
 					</div>

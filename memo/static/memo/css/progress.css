@@ -36,7 +36,7 @@
        -o-animation: progress-bar-stripes 2s linear infinite;
           animation: progress-bar-stripes 2s linear infinite;
 }
-.progress-bar-success {
+.progress-bar-finished {
   background-color: #20799D;
 }
 .progress-bar-gray {
@@ -71,7 +71,7 @@
   background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
   background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
 }
-.progress-bar-danger {
+.progress-bar-forgot {
   background-color: #d9534f;
 }
 .progress-striped .progress-bar-danger {

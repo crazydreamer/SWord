@@ -8,7 +8,7 @@ from django.contrib import messages
 from .models import Vocabulary, UserProfile, Word
 
 def index(request):
-    return render(request, "memo/index.html", {})
+    return render(request, "memo/index.html")
 
 
 @login_required
@@ -67,4 +67,5 @@ def memorizing(request):
     if voc is None:
         messages.add_message(request, messages.INFO, '请选择词书~')
         return HttpResponseRedirect(reverse("memo:profile"))
+        
     return render(request, "memo/memorizing.html")
