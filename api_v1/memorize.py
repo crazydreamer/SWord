@@ -55,7 +55,7 @@ def status(request, learning_id=None):
         put = QueryDict(request.body)                                       # 手动获取 PUT 信息
         status = int(put.get('status'))
 
-        learning = LearningWord.objects.get(pk=int(learning_id))            # TODO: 数据合法性判断！
+        learning = LearningWord.objects.get(pk=int(learning_id))
         if learning.user != request.user:
             return JsonResponse({
                     "success": False,

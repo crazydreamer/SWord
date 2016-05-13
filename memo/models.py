@@ -2,7 +2,8 @@
 
 from __future__ import unicode_literals
 
-from datetime import datetime
+# from datetime import datetime
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -43,7 +44,7 @@ class Note(models.Model):
 
     word = models.ForeignKey("Word", on_delete=models.CASCADE, null=False)
     content = models.TextField("Content", default="")
-    time = models.DateTimeField("Publish time", default=datetime.now())
+    time = models.DateTimeField("Publish time", default=timezone.now)
     user = models.ForeignKey(User, null=False)
 
     def information(self):
@@ -53,7 +54,7 @@ class Note(models.Model):
         }
 
     def __str__(self):
-        return " " .join([self.word.content.encode("utf-8"), self.content.encode("utf-8")])
+        return self.word.content.encode('utf-8')+u' '+self.content.encode('utf-8')
 
 
 class UserProfile(models.Model):

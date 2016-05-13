@@ -5,9 +5,17 @@
 <div class="ui centered grid">
 	<div class="eight wide column">
 		<div class="ui piled segments" word-id="{{ id }}">
-			<div class="ui segment">{{ content }}</div>
-			<div class="ui segment">Description: {{ description }}</div>
-			<div class="ui segment">Sentence: {{ example }}</div>
+			<div class="ui segment">
+				<h2 class="ui header">{{ content }}</h2>
+			</div>
+			<div class="ui segment">
+				<h5>释义: </h5>
+				<p>{{ description }}</p>
+			</div>
+			<div class="ui segment">
+				<h5>例句：</h5>
+				<p>{{ example }}</p>
+			</div>
 			<div class="ui segment">
 				<div action="post" class="ui form">
 					<div class="field">
