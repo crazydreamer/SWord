@@ -64,7 +64,7 @@ class UserProfile(models.Model):
     memorized_words = models.ManyToManyField("Word", blank=True, 
                             related_name="memorized_words")
     current_vocabulary = models.ForeignKey("Vocabulary", 
-                    on_delete=models.SET_NULL, null=True)
+                    on_delete=models.SET_NULL, null=True, blank=True)
     daily_words_amount = models.SmallIntegerField("Daily Words Amount", default=20)
 
     def __str__(self):

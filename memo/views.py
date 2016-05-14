@@ -17,37 +17,41 @@ def profile(request):
     profile = UserProfile.objects.get(user=request.user)
 
     if request.method == "POST":
-        voc_name = request.POST["vocabulary"]
+        try:
+            voc_id = int(request.POST["vocabulary"])
+        except TypeError:
+            voc_id = -1
         try:
             daily_words = int(request.POST["daily_words"])
         except TypeError:
-            daily_words = profile.daily_words_amount
+            daily_words = -1
 
-        if daily_words <= 0:
-            messages.add_message(request, messages.WARNING, '每日所背单词数应大于 0!')
-            daily_words = profile.daily_words_amount            
+        if daily_words > 0:
+            profile.daily_words_amount = daily_words
+        else:
+            messages.add_message(request, messages.WARNING, '词数设置错误！')
 
-        voc = Vocabulary.objects.get(name=voc_name)
-        profile.current_vocabulary = voc
-        profile.daily_words_amount = daily_words
+        try:
+            voc = Vocabulary.objects.get(pk=voc_id)
+            profile.current_vocabulary = voc
+        except Vocabulary.DoNotExist:
+            messages.add_message(request, messages.WARNING, '词书选择错误！')
+
         profile.save()
 
-    vocs = [v.name for v in Vocabulary.objects.all()]
+    vocs = Vocabulary.objects.all()
     current_voc = profile.current_vocabulary
-
-    if current_voc:
-        vocs.remove(current_voc.name)
-        vocs.insert(0, current_voc.name)
 
     context = { 
             "vocs": vocs,
+            "current_voc": current_voc,
             "daily_words": profile.daily_words_amount,
             "total_words": profile.memorized_words.count()
         }
     return render(request, "memo/profile.html", context)
 
 
-def find_word(request, word):
+def word(request, word):
     try:
         word_id = int(word)
         word = get_object_or_404(Word, pk=word_id)

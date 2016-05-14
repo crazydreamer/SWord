@@ -29,8 +29,11 @@
               <div class="inline field">
                 <label>选择词书</label>
                 <select name="vocabulary" class="ui fluid dropdown">
+                  <option value="">Select Vocabulary</option>
                   {% for v in vocs %}
-                    <option value="{{ v }}">{{ v }}</option>
+                    <option value="{{ v.id }}" {% if v == current_voc %}selected="selected"{% endif %}>
+                      {{ v.name }}
+                    </option>
                   {% endfor %}
                 </select>
               </div>
