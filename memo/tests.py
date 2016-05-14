@@ -64,21 +64,13 @@ class WordSelectingTests(TestCase):
     def test_select_words(self):
         u"""Testing the words selected randomly"""
         words = select_word(self.user)
-        count = 0
-        words_set = []
-        for w in words:                                                         # 需要手动统计个数
-            words_set.append(w)
-            count += 1
-        self.assertEqual(count, self.up.daily_words_amount)
+        words_set = list(words)
+        self.assertEqual(len(words_set), self.up.daily_words_amount)
 
         for w in words_set:                                                     # 将第一组单词添加到已掌握单词
             self.up.memorized_words.add(w)
 
         words = select_word(self.user)
-        count = 0
-        words_set = []
-        for w in words:
-            words_set.append(w)
-            count += 1
+        words_set = list(words)
         # 共 50 单词，已掌握 35 个，第二组只能选出 15 个
-        self.assertEqual(count, 15)
+        self.assertEqual(len(words_set), 15)
