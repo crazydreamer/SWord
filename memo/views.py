@@ -19,11 +19,11 @@ def profile(request):
     if request.method == "POST":
         try:
             voc_id = int(request.POST["vocabulary"])
-        except TypeError:
+        except ValueError:
             voc_id = -1
         try:
             daily_words = int(request.POST["daily_words"])
-        except TypeError:
+        except ValueError:
             daily_words = -1
 
         if daily_words > 0:
@@ -34,7 +34,7 @@ def profile(request):
         try:
             voc = Vocabulary.objects.get(pk=voc_id)
             profile.current_vocabulary = voc
-        except Vocabulary.DoNotExist:
+        except Vocabulary.DoesNotExist:
             messages.add_message(request, messages.WARNING, '词书选择错误！')
 
         profile.save()

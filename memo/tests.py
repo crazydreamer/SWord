@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.utils import timezone
 from .models import Note, Word, Vocabulary, UserProfile
 from django.contrib.auth.models import User
@@ -20,7 +20,7 @@ class NoteTests(TestCase):
         note = Note(content="", user=self.test_user, word=self.test_word)
         now = timezone.now()
         note.save()
-        self.assertTrue(-1<=(note.time-now).seconds<=1)
+        self.assertTrue(-2<=(note.time-now).seconds<=2)
 
 
 class UserProfileTests(TestCase):
@@ -74,3 +74,118 @@ class WordSelectingTests(TestCase):
         words_set = list(words)
         # 共 50 单词，已掌握 35 个，第二组只能选出 15 个
         self.assertEqual(len(words_set), 15)
+
+
+class ProfileViewTests(TestCase):
+    u"""个人资料页面测试"""
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user("user", "", "password")
+        self.up = UserProfile(user=self.user)
+        self.up.save()
+        self.voc = Vocabulary(name="voc")
+        self.voc.save()
+
+    def test_profile_view(self):
+        u"""访问性测试"""
+        response = self.client.get("/home", follow=True)                        # 未登录跳转
+        self.assertEqual(response.redirect_chain, [("/accounts/login/?next=/home", 302)])
+
+        self.client.force_login(self.user)
+        response = self.client.get("/home")
+        self.assertEqual(response.status_code, 200)
+
+    def test_post_parameter(self):
+        u"""POST 参数测试"""
+        self.client.force_login(self.user)
+        response = self.client.post("/home", {
+                "daily_words": "",                                              # 空参数
+                "vocabulary": ""
+            })
+        messages = [str(m) for m in list(response.context["messages"])]
+        self.assertEqual(len(messages), 2)
+        self.assertTrue(u'词数设置错误！' in messages)
+        self.assertTrue(u'词书选择错误！' in messages)
+
+        response = self.client.post("/home", {
+                "daily_words": "0",                                             # word <= 0
+                "vocabulary": "100"                                             # 词书不存在
+            })
+        messages = [str(m) for m in list(response.context["messages"])]
+        self.assertEqual(len(messages), 2)
+        self.assertTrue(u'词数设置错误！' in messages)
+        self.assertTrue(u'词书选择错误！' in messages)
+
+        response = self.client.post("/home", {
+                "daily_words": "100",                                           # 正常参数
+                "vocabulary": str(self.voc.id)
+            })
+        self.assertEqual(response.context["current_voc"], self.voc)
+        self.assertEqual(response.context["daily_words"], 100)
+        self.assertEqual(response.context["user"].userprofile.daily_words_amount,
+                                100)
+        self.assertEqual(response.context["user"].userprofile.current_vocabulary,
+                                self.voc)
+
+
+class WordViewTests(TestCase):
+    u"""单词页面测试"""
+    def setUp(self):
+        self.client = Client()
+        self.word = Word(content="word", description="word")
+        self.word.save()
+        self.user = User.objects.create_user("user", "", "password")
+        self.notes = []
+        for i in range(3):
+            n = Note(word=self.word, content="content%d"%i, user=self.user)
+            self.notes.append(n)
+            n.save()
+
+    def test_word_view(self):
+        u"""访问性测试"""
+        notes_data = []
+        for note in reversed(self.notes):
+            notes_data.append({
+                    "content": note.content,
+                    "user": note.user.username
+                })
+
+        response = self.client.get("/word/"+self.word.content)                  # 通过内容访问
+        self.assertEqual(response.context["content"], self.word.content)
+        self.assertEqual(response.context["notes"], notes_data)
+
+        response = self.client.get("/word/"+str(self.word.id))                  # 通过 id 访问
+        self.assertEqual(response.context["content"], self.word.content)
+        self.assertEqual(response.context["notes"], notes_data)
+
+        response = self.client.get("/word/abc")                                 # 404
+        self.assertEqual(response.status_code, 404)
+
+
+class MemorizingViewTests(TestCase):
+    u"""背单词页面测试"""
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user("user", "email", "password")
+        self.up = UserProfile(user=self.user)
+        self.up.save()
+        self.voc = Vocabulary(name="test_voc")
+        self.voc.save()
+
+    def test_memorizing_view(self):
+        u"""访问性测试"""
+        response = self.client.get("/memo", follow=True)                        # 未登录跳转
+        self.assertEqual(response.redirect_chain, [("/accounts/login/?next=/memo", 302)])
+
+        self.client.force_login(self.user)                                      # 登录但未选择词书跳转
+        response = self.client.get("/memo", follow=True)
+        self.assertEqual(response.redirect_chain, [("/home", 302)])
+        messages = list(response.context["messages"])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), u"请选择词书~")
+
+        self.up.current_vocabulary = self.voc                                   # 正常访问
+        self.up.save()
+        response = self.client.get("/memo", follow=True)
+        self.assertEqual(response.redirect_chain, [])                           # 不知道这俩哪个好…
+        self.assertTrue(u"开始" in response.content)
