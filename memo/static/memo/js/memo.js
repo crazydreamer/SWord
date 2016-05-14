@@ -16,6 +16,7 @@ function getCookie(name) {
   return cookieValue;
 }
 
+// 进行 POST 等操作时头部加上 CSRFToken
 function csrfSafeMethod(method) {
   // these HTTP methods do not require CSRF protection
   return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -27,6 +28,8 @@ $.ajaxSetup({
     }
   }
 });
+
+// 设置 jQuery.rest client
 var client = new $.RestClient("/api/v1/");
 client.add("memo_status");
 client.add("memo_finish");
@@ -34,15 +37,15 @@ client.add("memo_finish");
 var app = new Vue({
   el: "#app",
   data: {
-    status: 3,
-    know: false,
-    current_index: 0,
+    status: 3,          // 当前背单词状态
+    know: false,        // 是否认识当前单词
+    current_index: 0,   // 当前单词下标
     words: [],
-    start: false,
-    finish: false
+    start: false,       // 开始状态
   },
   computed: {
     word_stat: function () {
+      // 单词背诵情况统计
       var nums = [0,0,0,0];
       var total = this.words.length;
 
@@ -59,9 +62,11 @@ var app = new Vue({
       };
     },
     current_word: function () {
+      // 当前单词
       return this.words[this.current_index];
     },
     finish: function () {
+      // 完成状态
       return (this.word_stat.total == this.word_stat.progress[0])
     }
   },
@@ -107,7 +112,6 @@ var app = new Vue({
         this.current_index = 0;
         this.start = false;
         this.finish = true;
-        return;
       }
       else {
         // 随机一个未掌握的词
@@ -117,14 +121,16 @@ var app = new Vue({
       }
       this.know = false;
     },
-    do_finish: function () {
+    do_finish: function (event) {
       var app = this;
+      $(event.target).addClass("loading");
 
       $.post("/api/v1/memo_finish", {}, function (data, status) {
         if (data.success) {
-          app.finish = false;
           $.getJSON("/api/v1/memo_status", function(data, status) {
             app.words = data.words;
+            app.finish = false;
+            $(event.target).removeClass("loading");
           })
         }
       });

@@ -1,7 +1,7 @@
 body {
   font-family: Calibri, "Microsoft Yahei", sans-serif;
 }
-.ui.header {
+.ui.header, .ui.button {
   font-family: Calibri, "Microsoft Yahei", sans-serif;
 }
 .ui.inverted.menu {

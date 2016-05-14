@@ -1,4 +1,16 @@
-.word-content {
+body {
+	background: #F0F8FF;
+}
+
+#memo .ui.segment.word-content, #detail .ui.segment.word-content {
 	font-weight: bold;
 	font-size: 2em;
+}
+
+#memo .ui.segment, #detail .ui.segment {
+	font-size: 1.3em;
+}
+
+#detail .ui.segments.notes>.segment {
+	font-size: 0.9em;
 }

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login - SWord{% endblock %}
 
 {% block library %}
 <link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
@@ -13,7 +13,7 @@
     <h2 class="ui teal image header">
       {# <img src="assets/images/logo.png" class="image"> #}
       <div class="content">
-        Log-in to your account
+        登录到 SWord
       </div>
     </h2>
     <form class="ui large form {% if error %}error{% endif %}" method="post">
@@ -28,22 +28,22 @@
         <div class="field">
           <div class="ui left icon input">
             <i class="user icon"></i>
-            <input type="text" name="username" placeholder="Username">
+            <input type="text" name="username" placeholder="用户名">
           </div>
         </div>
         <div class="field">
           <div class="ui left icon input">
             <i class="lock icon"></i>
-            <input type="password" name="password" placeholder="Password">
+            <input type="password" name="password" placeholder="密码">
           </div>
         </div>
-        <input type="submit" class="ui fluid large teal submit button" value="Login"></input>
+        <input type="submit" class="ui fluid large teal submit button" value="登录"></input>
       </div>
 
     </form>
 
     <div class="ui message">
-      New to us? <a href="{% url 'accounts:register' %}">Sign Up</a>
+      新用户？ <a href="{% url 'accounts:register' %}">注册</a>
     </div>
   </div>
 </div>
