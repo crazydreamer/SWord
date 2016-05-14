@@ -1,7 +1,33 @@
 {
+	"build_systems":
+	[
+		{
+			"cmd":
+			[
+				"cmd",
+				"/c",
+				"start",
+				"cmd",
+				"/c",
+				"python",
+				"-u",
+				"manage.py",
+				"runserver"
+			],
+			"env": {
+				"DJANGO_SETTINGS_MODULE": "SWord.settings"
+			},
+			"working_dir": ".", 
+			"name": "Python - Django"
+		}
+	],
 	"folders":
 	[
 		{
+			"folder_exclude_patterns":
+			[
+				"node_modules"
+			],
 			"path": "."
 		}
 	]
