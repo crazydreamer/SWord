@@ -84,12 +84,15 @@
 		<div class="ui segment" v-else>
 			<div class="ui two column grid">
 				<div class="eight wide column">
-					<p>今天要背的单词：{{ word_stat.total }}</p>
+					<p>要背的单词：{{ word_stat.total }}</p>
 					<p>已完成：{{ word_stat.progress[0] }}</p>
 				</div>
-				<div class="four wide column">
+				<div class="four wide column" v-if="word_stat.total">
 					<button class="ui big green circular button" @click="do_finish" v-if="finish">再来一组</button>
 					<button class="ui button" @click="begin" v-else>开始</button>
+				</div>
+				<div class="four wide column" v-else>
+					<a class="ui huge green button" href="/home">你已背完当前词书 <i class="thumbs up icon"></i></a>
 				</div>
 			</div>
 		</div>

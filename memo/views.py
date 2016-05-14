@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from .models import Vocabulary, UserProfile, Word
 
+
 def index(request):
     return render(request, "memo/index.html")
 
@@ -21,6 +22,10 @@ def profile(request):
             daily_words = int(request.POST["daily_words"])
         except TypeError:
             daily_words = profile.daily_words_amount
+
+        if daily_words <= 0:
+            messages.add_message(request, messages.WARNING, '每日所背单词数应大于 0!')
+            daily_words = profile.daily_words_amount            
 
         voc = Vocabulary.objects.get(name=voc_name)
         profile.current_vocabulary = voc
