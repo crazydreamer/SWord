@@ -1,5 +1,5 @@
 from django.conf.urls import include, url
-import views, auth
+import views
 
 app_name = 'memo'
 urlpatterns = [
