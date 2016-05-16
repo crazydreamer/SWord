@@ -4,7 +4,7 @@
 import random
 from memo.models import Word, Vocabulary
 
-def add_word(word):
+def add_word():
     """添加单词"""
 
     f = file("scripts/vocabulary.txt", "r")
@@ -12,7 +12,7 @@ def add_word(word):
 
     for line in f:
         word, exp = line.strip().split(" ", 1)
-        sentence = "I'm memorizing word \"%s\""%word
+        sentence = "I'm memorizing the word \"%s\"."%word
 
         w = Word(content=word, description=exp, example=sentence)
         w.save()
