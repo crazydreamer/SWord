@@ -16,10 +16,16 @@ def note(request, word_id):
                     "reason": "Word does not exist"
                 }, status=404)
     if request.method == "GET":
-        start = int(request.GET.get("from", 0))
-        end = int(request.GET.get("to", start+10))
+        try:
+            start = int(request.GET.get("from", 0))
+            end = int(request.GET.get("to", start+10))
+        except ValueError:
+            return JsonResponse({
+                        "success": False, 
+                        "reason": "start or end parameter error"
+                    }, status=400)
 
-        if start >= 0 and end >= 0 and start >= end:
+        if start < 0 or end < 0 or start >= end:
             return JsonResponse({
                         "success": False, 
                         "reason": "start or end parameter error"
@@ -72,8 +78,10 @@ def search(request):
             try:
                 word = Word.objects.get(content=content)
             except Word.DoesNotExist:
-                return JsonResponse({"success": False, "reason": "Word does not exist"},
-                                status=404)
+                return JsonResponse({
+                        "success": False, 
+                        "reason": "Word does not exist"
+                    }, status=404)
             return JsonResponse({
                         "success": True,
                         "word": word.information()
@@ -85,6 +93,6 @@ def search(request):
                 })
 
     return JsonResponse({
-            "success": True,
-            "word": word.information()
-            })
+        "success": False,
+        "reason": "Method not allowed"
+    }, status=405)

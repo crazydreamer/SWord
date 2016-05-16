@@ -1,10 +1,11 @@
 # coding: utf-8
 
 from datetime import timedelta
+from django.utils import timezone
 from django.test import TestCase, Client
 from django.utils import timezone
-from .models import Note, Word, Vocabulary, UserProfile
 from django.contrib.auth.models import User
+from .models import Note, Word, Vocabulary, UserProfile
 
 
 # Create your tests here.

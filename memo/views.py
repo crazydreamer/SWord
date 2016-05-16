@@ -14,7 +14,7 @@ def index(request):
 
 @login_required
 def profile(request):
-    profile = UserProfile.objects.get(user=request.user)
+    profile = request.user.userprofile
 
     if request.method == "POST":
         try:
@@ -72,7 +72,7 @@ def word(request, word):
 
 @login_required
 def memorizing(request):
-    voc = UserProfile.objects.get(user=request.user).current_vocabulary
+    voc = request.user.userprofile.current_vocabulary
     if voc is None:
         messages.add_message(request, messages.INFO, '请选择词书~')
         return HttpResponseRedirect(reverse("memo:profile"))

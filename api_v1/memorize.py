@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django.http import JsonResponse
-from memo.models import Word, Note, UserProfile, LearningWord
+from memo.models import Word, Note, LearningWord
 from django.http import QueryDict
 from .decorator import authenticated_required
 
@@ -81,7 +81,7 @@ def finish(request):
     """用户已完成，将用户所有正在学习的单词转移至已掌握，只接受POST"""
     if request.method == "POST":
         user = request.user
-        profile = UserProfile.objects.get(user=user)
+        profile = user.userprofile
         learning_words = LearningWord.objects.filter(user=user)
         for lw in learning_words:
             word = lw.word
