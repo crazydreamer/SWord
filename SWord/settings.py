@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'fhf54ds79_-0*!z3^u9x=ods77i(h1oy5=g-2mqu^nfq3w^wni'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["word.stdioa.com"]
 
 
 # Application definition

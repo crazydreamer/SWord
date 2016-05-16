@@ -15,7 +15,7 @@
 				"runserver"
 			],
 			"env": {
-				"DJANGO_SETTINGS_MODULE": "SWord.settings"
+				"DJANGO_SETTINGS_MODULE": "SWord.settings-dev"
 			},
 			"working_dir": ".", 
 			"name": "Python - Django"
